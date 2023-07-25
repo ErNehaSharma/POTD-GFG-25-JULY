@@ -1,0 +1,96 @@
+Given a binary tree and the task is to find the spiral order traversal of the tree.
+
+Spiral order Traversal mean: Starting from level 0 for root node, for all the even levels we print the node's value from right to left and for all the odd levels we print the node's value from left to right. 
+
+For below tree, function should return 1, 2, 3, 4, 5, 6, 7. 
+
+Example 1:
+
+Input:
+      1
+    /   \
+   3     2
+Output:1 3 2
+
+Example 2:
+
+Input:
+           10
+         /     \
+        20     30
+      /    \
+    40     60
+Output: 10 20 30 60 40 
+Your Task:
+The task is to complete the function findSpiral() which takes root node as input parameter and returns the elements in spiral form of level order traversal as a list. The newline is automatically appended by the driver code.
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+
+Constraints:
+1 <= Number of nodes <= 105
+0 <= Data of a node <= 105
+
+
+----------------------------------------------------------------------------------------------------------
+solution for problem is here:
+
+#Function to find the height of the tree.
+def getHeight(root):
+    
+    #base case for recursion.
+    if root is None:
+        return 0
+    
+    #finding height of left subtree recursively.
+    lh = getHeight(root.left)
+    
+    #finding height of right subtree recursively.
+    rh = getHeight(root.right)
+    
+    #taking the maximum as height of tree.
+    if lh>rh:
+        return lh+1
+    else:
+        return rh+1
+
+
+#Function to do level order traversal of tree in spiral form.
+def printLevel(result,node, lvl, flg):
+    
+    #base case for recursion.
+    if node is None:
+        return
+    
+    #if level is 1, we push the data in the list.
+    if lvl==1:
+        result.append(node.data)
+    
+    elif(lvl > 1):
+        
+        #if flg is true, we call the spiral function recursively for the
+        #left subtrees first and then for right subtrees.
+        if flg:
+            printLevel(result,node.left, lvl-1, flg)
+            printLevel(result,node.right, lvl-1, flg)
+        
+        #else we call for right subtrees first and then left subtrees.
+        else:
+            printLevel(result,node.right, lvl-1, flg)
+            printLevel(result,node.left, lvl-1, flg)
+
+#Function to return a list containing the level order traversal in spiral form.
+def findSpiral(root):
+
+    result = []
+    if root is None:
+        return result
+    h = getHeight(root)
+    ltr = False
+    #for each level, we do the spiral traversal.
+    for i in range(1, h+1):
+        printLevel(result,root, i, ltr)
+        ltr = not ltr
+        
+    #returning the list.
+    return result
+        
